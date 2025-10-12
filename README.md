@@ -18,7 +18,7 @@ Supabase pauses free-tier databases after periods of inactivity. This workflow p
 
 ### 1. Add GitHub Secret
 
-Go to your repository **Settings** → **Secrets and variables** → **Actions** and create a new secret:
+Go to your repository **Settings** → **Secrets and variables** → **Actions** → **Secrets** tab and create a new secret:
 
 **Name:** `SUPABASE_CONFIGS`
 
@@ -40,6 +40,8 @@ Go to your repository **Settings** → **Secrets and variables** → **Actions**
 Get your credentials from Supabase Dashboard → Settings → API:
 - `url` = Project URL
 - `key` = anon/public key (recommended) or service_role key
+
+**Note:** The config is stored as a Secret (not visible after creation). To see which databases you're pinging, check the Action logs after running the workflow - it prints the database names and URLs.
 
 ### 2. Adjust Schedule (Optional)
 
@@ -67,6 +69,29 @@ npm install
 cp env.example .env
 # Edit .env with your configs
 npm run ping
+```
+
+Example output:
+```
+Pinging 2 database(s)...
+Timestamp: 2025-10-12T16:00:00.000Z
+------------------------------------------------------------
+
+[1/2] Production
+URL: https://xxx.supabase.co
+Success! Response time: 245ms
+
+[2/2] Staging
+URL: https://yyy.supabase.co
+Success! Response time: 198ms
+
+------------------------------------------------------------
+Summary:
+  Successful: 2
+  Failed: 0
+  Total: 2
+
+All databases pinged successfully!
 ```
 
 ## How It Works

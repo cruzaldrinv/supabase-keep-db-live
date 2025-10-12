@@ -12,7 +12,7 @@
     try {
       require('dotenv').config();
     } catch (e) {
-      console.log('💡 Note: dotenv not installed. Using environment variables from system.\n');
+      // dotenv not installed, using system environment variables
     }
 
     const { createClient } = require('@supabase/supabase-js');
@@ -28,9 +28,9 @@
       throw new Error('SUPABASE_CONFIGS must be a non-empty array of database configurations');
     }
 
-    console.log('🚀 Starting to ping', configs.length, 'database(s)...');
-    console.log('⏰ Timestamp:', new Date().toISOString());
-    console.log('═'.repeat(60));
+    console.log('Pinging', configs.length, 'database(s)...');
+    console.log('Timestamp:', new Date().toISOString());
+    console.log('-'.repeat(60));
     
     let successCount = 0;
     let failCount = 0;
@@ -41,8 +41,8 @@
       const dbName = config.name || `Database ${i + 1}`;
       
       try {
-        console.log(`\n📊 [${i + 1}/${configs.length}] Pinging: ${dbName}`);
-        console.log('📍 URL:', config.url);
+        console.log(`\n[${i + 1}/${configs.length}] ${dbName}`);
+        console.log('URL:', config.url);
         
         if (!config.url || !config.key) {
           throw new Error(`Missing url or key for ${dbName}`);
@@ -67,36 +67,33 @@
           throw new Error(`Server returned status ${response.status}`);
         }
         
-        console.log('✅ Success! Response time:', duration + 'ms');
+        console.log('Success! Response time:', duration + 'ms');
         successCount++;
         
       } catch (err) {
-        console.error('❌ Failed:', err.message);
+        console.error('Failed:', err.message);
         failCount++;
       }
     }
 
     // Summary
-    console.log('\n' + '═'.repeat(60));
-    console.log('📈 Summary:');
-    console.log('   ✅ Successful:', successCount);
-    console.log('   ❌ Failed:', failCount);
-    console.log('   📊 Total:', configs.length);
+    console.log('\n' + '-'.repeat(60));
+    console.log('Summary:');
+    console.log('  Successful:', successCount);
+    console.log('  Failed:', failCount);
+    console.log('  Total:', configs.length);
     
     if (failCount > 0) {
-      console.error('\n⚠️  Some databases failed to ping');
+      console.error('\nSome databases failed to ping');
       process.exit(1);
     }
     
-    console.log('\n🎉 All databases pinged successfully!');
+    console.log('\nAll databases pinged successfully!');
     
   } catch (err) {
-    console.error('\n❌ Fatal error:', err.message);
-    console.error('\n💡 Troubleshooting tips:');
-    console.error('   1. Make sure SUPABASE_CONFIGS is set in your .env file or environment');
-    console.error('   2. SUPABASE_CONFIGS should be a JSON array like:');
-    console.error('      [{"name":"My DB","url":"https://xxx.supabase.co","key":"your-key"}]');
-    console.error('   3. Check your Supabase credentials and permissions');
+    console.error('\nFatal error:', err.message);
+    console.error('Make sure SUPABASE_CONFIGS is set as a JSON array:');
+    console.error('[{"name":"My DB","url":"https://xxx.supabase.co","key":"your-key"}]');
     process.exit(1);
   }
 })();
